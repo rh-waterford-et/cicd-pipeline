@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local
+  annotations:
+    description: Default (local) storage class used by rh-waterford-et pipeline
+  namespace: rh-waterford-et
+provisioner: Local
+reclaimPolicy: Delete
+volumeBindingMode: Immediate

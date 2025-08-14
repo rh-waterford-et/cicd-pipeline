@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: rh-waterford-et-all
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: rh-waterford-et-all-trigger
+      bindings:
+        - ref: rh-waterford-et-all
+      template:
+        ref: rh-waterford-et-all

@@ -1,0 +1,51 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: clone-repo
+spec:
+  params:
+    - name: repo
+      default: ""
+      type: string
+    - name: branch
+      default: "main"
+      type: string
+    - name: clean
+      default: "true"
+      type: string
+
+  steps:
+    - image: 'quay.io/luzuccar/rh-waterford-golang:v1.24.5'
+      name: clone-repo
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        echo -e "${params.repo}"
+        repo_name=$(echo -e "${params.repo}" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+        echo -e "${repo_name}"
+
+        if [ "${params.clean}" == "true" ];
+        then
+          rm -rf ${params.repo}
+        fi
+
+        if [ ! -d ${params.repo} ];
+        then
+          git clone -b ${params.branch} ${params.repo}
+        fi
+
+        cd ${repo_name}
+
+        ls -la
+        
+  workspaces:
+    - mountPath: /src
+      name: ws

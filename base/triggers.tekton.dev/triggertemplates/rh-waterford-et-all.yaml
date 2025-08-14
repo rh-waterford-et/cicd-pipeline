@@ -1,0 +1,45 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: rh-watreford-et-all-tt
+spec:
+  params:
+  - name: repo
+    default: ""
+  - name: branch
+    default: "master"
+  - name: clean
+    default: 'true'
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: rh-waterford-et-pipelinerun-
+      annotations:
+        operator.tekton.dev/prune.skip: "false"
+        operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
+        operator.tekton.dev/prune.keep: "1"
+        operator.tekton.dev/prune.strategy: "keep"
+    spec:
+      serviceAccountName: pipeline
+      params:
+        - name: repo
+          value: $(tt.params.repo)
+        - name: branch
+          value: $(tt.params.branch)
+        - name: clean
+          value: $(tt.params.clean)
+      pipelineRef:
+        name: rh-watreford-et-all
+      timeouts:
+        pipeline: "1h0m0s"
+      workspaces:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: rh-waterford-et-pvc
+        - name: go-build
+          persistentVolumeClaim:
+            claimName: rh-waterford-et-pvc
+        - name: shared-workspace
+          persistentVolumeClaim:
+            claimName: rh-watreford-et-pvc

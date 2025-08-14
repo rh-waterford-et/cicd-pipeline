@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: rh-waterford-et-all
+spec:
+  params:
+  - name: repo
+    value: $(body.params.repo)
+  - name: branch
+    value: $(body.params.branch)
+  - name: clean
+    value: $(body.params.clean)

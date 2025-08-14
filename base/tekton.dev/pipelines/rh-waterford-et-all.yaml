@@ -1,0 +1,58 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: rh-waterford-et-all
+spec:
+  params:
+    - default: "https://github.com/rh-waterford-at/p2code_scheduler_operator.git"
+      name: repo
+      type: string
+    - default: "master"
+      name: branch
+      type: string
+    - default: "true"
+      name: clean
+      type: string
+  tasks:
+    - name: clone-repo
+      params:
+        - name: repo
+          value: $(params.repo)
+        - name: branch
+          value: $(params.branch)
+        - name: clean
+          value: $(params.clean)
+      taskRef:
+        kind: Task
+        name: clone-repo
+      workspaces:
+        - name: ws
+          workspace: shared-workspace
+    - name: lint
+      runAfter:
+        - clone-repo
+      taskRef:
+        kind: Task
+        name: lint-repo
+      params:
+        - name: repo
+          value: $(params.repo)
+      workspaces:
+        - name: ws
+          workspace: shared-workspace
+    - name: build
+      params:
+        - name: repo
+          value: $(params.repo)
+      runAfter:
+        - lint
+      taskRef:
+        kind: Task
+        name: build-repo
+      workspaces:
+        - name: ws
+          workspace: shared-workspace
+  workspaces:
+    - name: cache
+    - name: go-build
+    - name: shared-workspace

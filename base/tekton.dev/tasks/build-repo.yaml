@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-repo
+spec:
+  params:
+    - name: repo
+      default: ""
+      type: string
+    - name: branch
+      default: "main"
+      type: string
+    - name: clean
+      default: "false"
+      type: string
+
+  steps:
+    - image: 'quay.io/luzuccar/rh-waterford-golang:v1.24.5'
+      name: build-repo
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        make build
+        
+  workspaces:
+    - mountPath: /src
+      name: ws

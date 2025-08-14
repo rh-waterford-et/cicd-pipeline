@@ -1,0 +1,4 @@
+resources:
+  - clone-repo.yaml
+  - lint-repo.yaml
+  - build-repo.yaml

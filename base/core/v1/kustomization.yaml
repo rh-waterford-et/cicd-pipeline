@@ -1,0 +1,3 @@
+resources:
+  #- pv-stable.yaml
+  - pvc-stable.yaml
