@@ -10,7 +10,7 @@ oc apply -k environments/waltons-institute
 ```
 
 ## Run the pipeline
-Launch the pipeline run with the Tekton client.
+Launch the pipeline run.
 
 Example 
 ```bash
