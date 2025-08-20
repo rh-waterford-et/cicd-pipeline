@@ -12,7 +12,7 @@ spec:
     - name: repo
       value: "https://github.com/rh-waterford-et/p2code_scheduler_operator.git"
     - name: branch
-      value: "master"
+      value: "main"
     - name: clean
       value: "true"
   pipelineRef:
@@ -22,14 +22,15 @@ spec:
        kubernetes.io/os: linux
   timeouts:
     pipeline: "1h0m0s"
+    tasks: "10m"
   #serviceAccountName: sa-okd-privileged
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
-        claimName: rh-waterford-et-pvc
+        claimName: rh-wat-et-pvc01
     - name: cache
       persistentVolumeClaim:
-        claimName: rh-waterford-et-pvc
+        claimName: rh-wat-et-pvc01
     - name: go-build
       persistentVolumeClaim:
-        claimName: rh-waterford-et-pvc
+        claimName: rh-wat-et-pvc01

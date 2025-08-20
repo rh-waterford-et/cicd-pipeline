@@ -19,17 +19,35 @@ spec:
       name: build-repo
       resources:
         limits:
-          cpu: 500m
-          memory: 1Gi
+          cpu: 8000m
+          memory: 8Gi
         requests:
-          cpu: 500m
-          memory: 1Gi
+          cpu: 8000m
+          memory: 8Gi
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
 
+        cd /home/1001/src
+
+        echo -e "$(params.repo)"
+        repo_name=$(echo -e "$(params.repo)" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+        echo -e "${repo_name}"
+
+        cd ${repo_name}
+
+        go env
+
         make build
-        
+      
+      volumeMounts:
+        - name: $(workspaces.ws.volume)
+          mountPath: /home/1001/src
+        - name: $(workspaces.cache.volume)
+          mountPath: /root/.cache/go-build
+
   workspaces:
     - mountPath: /src
       name: ws
+    - mountPtah: /cache
+      name: cache

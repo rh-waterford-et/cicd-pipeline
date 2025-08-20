@@ -1,4 +1,4 @@
-# CIC pipeline for rh-waterford-et projects
+# CICD pipeline for rh-waterford-et projects
 
 ## Prerequisites
 

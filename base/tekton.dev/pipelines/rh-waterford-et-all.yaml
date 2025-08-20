@@ -40,6 +40,8 @@ spec:
       workspaces:
         - name: ws
           workspace: shared-workspace
+        - name: cache
+          workspace: cache
     - name: build
       params:
         - name: repo
@@ -52,6 +54,9 @@ spec:
       workspaces:
         - name: ws
           workspace: shared-workspace
+        - name: cache
+          workspace: cache
+
   workspaces:
     - name: cache
     - name: go-build

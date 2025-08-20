@@ -27,24 +27,30 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+    
+        cd /home/1001/src
 
-        echo -e "${params.repo}"
-        repo_name=$(echo -e "${params.repo}" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+        echo -e "$(params.repo)"
+        repo_name=$(echo -e "$(params.repo)" | rev | cut -d/ -f1 | rev | cut -d. -f1)
         echo -e "${repo_name}"
 
-        if [ "${params.clean}" == "true" ];
+        if [ "$(params.clean)" == "true" ];
         then
-          rm -rf ${params.repo}
+          rm -rf $(repo_name)
         fi
 
-        if [ ! -d ${params.repo} ];
+        if [ ! -d $(repo_name) ];
         then
-          git clone -b ${params.branch} ${params.repo}
+          git clone -b $(params.branch) $(params.repo)
         fi
 
         cd ${repo_name}
 
-        ls -la
+        pwd
+
+      volumeMounts:
+        - name: $(workspaces.ws.volume)
+          mountPath: /home/1001/src
         
   workspaces:
     - mountPath: /src
