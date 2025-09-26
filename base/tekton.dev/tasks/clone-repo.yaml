@@ -8,7 +8,13 @@ spec:
       default: ""
       type: string
     - name: branch
-      default: "main"
+      default: "none"
+      type: string
+    - name: pr
+      default: "pr"
+      type: string
+    - name: commit-sha
+      default: ""
       type: string
     - name: clean
       default: "true"
@@ -26,27 +32,27 @@ spec:
           memory: 1Gi
       script: |
         #!/usr/bin/env bash
-        set -euxo pipefail
+        # set -euxo pipefail
     
         cd /home/1001/src
 
-        echo -e "$(params.repo)"
-        repo_name=$(echo -e "$(params.repo)" | rev | cut -d/ -f1 | rev | cut -d. -f1)
-        echo -e "${repo_name}"
+        echo -e "repo   : $(params.repo)"
+        echo -e "branch : $(params.branch)"
+        echo -e "sha    : $(params.commit-sha)"
+        echo -e "pr     : $(params.pr)"
 
-        if [ "$(params.clean)" == "true" ];
-        then
-          rm -rf $(repo_name)
-        fi
+        REPO_NAME=$(echo -e "$(params.repo)" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+        echo -e "${REPO_NAME}"
+        ID=$(echo -e "$(params.pr)" | rev | cut -d/ -f1 | rev | cut -d. -f1)
+        echo -e "${ID}"
+        BRANCH_NAME=$(echo -e  "$(params.branch)-openshift-pipeline")
+        rm -rf ${REPO_NAME}
 
-        if [ ! -d $(repo_name) ];
-        then
-          git clone -b $(params.branch) $(params.repo)
-        fi
-
-        cd ${repo_name}
-
-        pwd
+        git clone -b main $(params.repo)
+        
+        cd ${REPO_NAME}
+        git fetch origin pull/${ID}/head:${BRANCH_NAME}
+        git checkout ${BRANCH_NAME}
 
       volumeMounts:
         - name: $(workspaces.ws.volume)

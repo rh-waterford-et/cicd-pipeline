@@ -1,12 +1,14 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: rh-waterford-et-all
+  name: rh-waterford-et-all-tb
 spec:
   params:
   - name: repo
-    value: $(body.params.repo)
+    value: $(body.pull_request.base.repo.html_url)
   - name: branch
-    value: $(body.params.branch)
-  - name: clean
-    value: $(body.params.clean)
+    value: $(body.pull_request.head.ref)
+  - name: pr
+    value: $(body.pull_request.html_url)
+  - name: commit-sha
+    value: $(body.pull_request.head.sha)

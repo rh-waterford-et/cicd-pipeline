@@ -7,6 +7,6 @@ spec:
   triggers:
     - name: rh-waterford-et-all-trigger
       bindings:
-        - ref: rh-waterford-et-all
+        - ref: rh-waterford-et-all-tb
       template:
-        ref: rh-waterford-et-all
+        ref: rh-waterford-et-all-tt

@@ -10,9 +10,11 @@ metadata:
 spec:
   params:
     - name: repo
-      value: "https://github.com/rh-waterford-et/p2code_scheduler_operator.git"
-    - name: branch
-      value: "main"
+      value: "https://github.com/lmzuccarelli/p2code_scheduler_operator.git"
+    - name: branch-name
+      value: "testbranch"
+    - name: "id"
+      value: "1"
     - name: clean
       value: "true"
   pipelineRef:

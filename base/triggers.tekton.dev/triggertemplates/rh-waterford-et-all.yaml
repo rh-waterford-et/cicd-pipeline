@@ -1,15 +1,19 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: rh-watreford-et-all-tt
+  name: rh-waterford-et-all-tt
 spec:
   params:
   - name: repo
     default: ""
   - name: branch
-    default: "master"
+    default: ""
+  - name: pr
+    default: ""
+  - name: commit-sha
+    default: ""
   - name: clean
-    default: 'true'
+    default: "true"
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -27,19 +31,24 @@ spec:
           value: $(tt.params.repo)
         - name: branch
           value: $(tt.params.branch)
+        - name: pr
+          value: $(tt.params.pr)
+        - name: commit-sha
+          value: $(tt.params.commit-sha)
         - name: clean
-          value: $(tt.params.clean)
+          value: "true"
       pipelineRef:
-        name: rh-watreford-et-all
+        name: rh-waterford-et-all
       timeouts:
         pipeline: "1h0m0s"
+        tasks: "10m"
       workspaces:
         - name: cache
           persistentVolumeClaim:
-            claimName: rh-waterford-et-pvc
+            claimName: rh-wat-et-pvc01
         - name: go-build
           persistentVolumeClaim:
-            claimName: rh-waterford-et-pvc
+            claimName: rh-wat-et-pvc01 
         - name: shared-workspace
           persistentVolumeClaim:
-            claimName: rh-watreford-et-pvc
+            claimName: rh-wat-et-pvc01
